@@ -1,20 +1,34 @@
 import java.util.HashMap;
 public class FSM {
+	/**
+	 * Gives a status of an FSM evaluation
+	 *
+	 */
+	public static enum Status {
+		PASS,
+		FAIL,
+		NONHALTING,
+		NOTINITIALIZED
+	};
 	private HashMap<String,Node> nodes;
 	private String init;
 	public FSM() {
 		nodes = new HashMap<String,Node>();
 		init  = null;
 	}
+	public void setInit(String n) {
+		init = n;
+	}
 	public void addNode(Node n) {
 		nodes.put(n.name, n);
 	}
-	public boolean pass(String s) {
+	public FSM.Status pass(String s) {
 		Node current = getNode(init);
 		if (current == null) {
 			System.out.println("Cannot find init node. Quitting..");
-			return false;
+			return Status.NOTINITIALIZED;
 		}
+		System.out.println("Starting traversal at " + init);
 		String digest = "";
 		int i=0;
 		while (i != s.length()) {
@@ -24,12 +38,19 @@ public class FSM {
 				current = nodes.get(temp);
 				if (current == null) {
 					System.out.println("Cannot find returned node: "+temp);
-					return false;
+					return Status.NOTINITIALIZED;
 				}
+				System.out.println("At " + digest + ", moved to "+current.name);
 				digest = "";
 			}
 		}
-		return false;
+		if (digest == "") {
+			if (current.getPassing()) {
+				return Status.PASS;
+			}
+			return Status.FAIL;
+		}
+		return Status.NONHALTING;
 	}
 	private Node getNode(String name) {
 		return nodes.get(name);
