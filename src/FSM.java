@@ -31,7 +31,7 @@ public class FSM {
 		System.out.println("Starting traversal at " + init);
 		String digest = "";
 		int i=0;
-		while (i != s.length()) {
+		while (i < s.length()) {
 			digest += String.valueOf(s.charAt(i++));
 			String temp = current.getLink(digest);
 			if (temp != null) {
