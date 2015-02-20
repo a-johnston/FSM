@@ -21,6 +21,9 @@ public class FSM {
 	}
 	public void addNode(Node n) {
 		nodes.put(n.name, n);
+		if (init == null) {
+			init = n.name;
+		}
 	}
 	public FSM.Status pass(String s) {
 		Node current = getNode(init);
