@@ -1,4 +1,5 @@
 import java.util.HashMap;
+import java.util.LinkedList;
 public class FSM {
 	/**
 	 * Gives a status of an FSM evaluation
@@ -25,37 +26,10 @@ public class FSM {
 			init = n.name;
 		}
 	}
-	public FSM.Status pass(String s) {
-		Node current = getNode(init);
-		if (current == null) {
-			System.out.println("Cannot find init node. Quitting..");
-			return Status.NOTINITIALIZED;
-		}
-		System.out.println("Starting traversal at " + init);
-		String digest = "";
-		int i=0;
-		while (i < s.length()) {
-			digest += String.valueOf(s.charAt(i++));
-			String temp = current.getLink(digest);
-			if (temp != null) {
-				current = nodes.get(temp);
-				if (current == null) {
-					System.out.println("Cannot find returned node: "+temp);
-					return Status.NOTINITIALIZED;
-				}
-				System.out.println("At " + digest + ", moved to "+current.name);
-				digest = "";
-			}
-		}
-		if (digest == "") {
-			if (current.getPassing()) {
-				return Status.PASS;
-			}
-			return Status.FAIL;
-		}
-		return Status.NONHALTING;
-	}
-	private Node getNode(String name) {
+	public Node getNode(String name) {
 		return nodes.get(name);
+	}
+	public boolean pass(String str) {
+		return getNode(init).pass(str);
 	}
 }

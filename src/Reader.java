@@ -21,7 +21,7 @@ public class Reader {
 				System.out.println(getErrorString("failed to find end of state class"));
 				return fsm;
 			}
-			Node n = new Node(data.substring(open, end));
+			Node n = new Node(fsm, data.substring(open, end));
 			if (data.charAt(end+1) == '*') {
 				n.setPassing(true);
 			}
@@ -62,7 +62,7 @@ public class Reader {
 			System.out.println(getErrorString("incorrect syntax in "+data));
 			return false;
 		}
-		n.addLink(parts[0], parts[1]);
+		n.addLink(parts[0], parts[1].split("[\\|]"));
 		return true;
 	}
 	private static String getErrorString(String message) {
